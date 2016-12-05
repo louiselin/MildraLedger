@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+                width: 100%;
+                border: 1px solid #ddd;
+            }
+        
+        th, td {
+            border: none;
+            text-align: left;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even){background-color: #f2f2f2}
+        
+        body {margin:0;}
+        ul.topnav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+        
+        ul.topnav li {float: left;}
+        
+        ul.topnav li a {
+            display: inline-block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+        
+        ul.topnav li a:hover {background-color: #555;}
+        
+        ul.topnav li.icon {display: none;}
+        
+        @media screen and (max-width:680px) {
+            ul.topnav li:not(:first-child) {display: none;}
+            ul.topnav li.icon {
+                float: right;
+                display: inline-block;
+            }
+        }
+        
+        @media screen and (max-width:680px) {
+            ul.topnav.responsive {position: relative;}
+            ul.topnav.responsive li.icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            ul.topnav.responsive li {
+                float: none;
+                display: inline;
+            }
+            ul.topnav.responsive li a {
+                display: block;
+                text-align: left;
+            }
+        }
+        
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+        
+        /* Set a style for all buttons */
+        button {
+            background-color: #333;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+        }
+        
+        /* The Close Button */
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .modal-header {
+            padding: 2px 16px;
+            background-color: #333;
+            color: white;
+        }
+        
+        .modal-body {padding: 2px 16px;}
+        
+        .modal-footer {
+            padding: 2px 16px;
+            background-color: #333;
+            color: white;
+        }
+        
+        
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+        
+        @-webkit-keyframes animatezoom {
+            from {-webkit-transform: scale(0)}
+            to {-webkit-transform: scale(1)}
+        }
+        
+        @keyframes animatezoom {
+            from {transform: scale(0)}
+            to {transform: scale(1)}
+        }
+        
+
+            </style>
+    </head>
+    <body>
+        <ul class="topnav" id="myTopnav">
+            <li><a class="active" href="main.html">Main</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="editing.html">Editing</a></li>
+            <li><a href="Management.html">Management</a></li>
+            <li><a href="login.html">Logout</a></li>
+            <li class="icon">
+                <a href="javascript:void(0);" style="font-size:15px;" onclick="myFunction()">☰</a>
+            </li>
+        </ul>
+        
+        <div style="overflow-x:auto;">
+            <table>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Cashier Address</th>
+                    <th>Transaction Type</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>TimeStamp</th>
+                </tr>
+                <tr>
+                    <td>y890du34</td>
+                    <td>Apple</td>
+                    <td>1</td>
+                    <td>Train Ticket</td>
+                    <td>NT$310</td>
+                    <td>2016/12/01 11:00</td>
+                </tr>
+                <tr>
+                    <td>238198ru</td>
+                    <td>Bob</td>
+                    <td>0</td>
+                    <td>Fundraising</td>
+                    <td>NT$3100</td>
+                    <td>2016/10/01 10:00</td>
+                </tr>
+                <tr>
+                    <td>y890du34</td>
+                    <td>Apple</td>
+                    <td>1</td>
+                    <td>Paper</td>
+                    <td>NT$31</td>
+                    <td>2016/11/11 18:00</td>
+                </tr>
+            </table>
+        </div>
+        
+        
+        <!-- Trigger/Open The Modal -->
+        <button id="myBtn">Add</button>
+        
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times</span>
+                        
+                        <h2>Add Transaction</h2>
+                        </div>
+                        <div style="overflow-x:auto;">
+                        <table>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Cashier Address</th>
+                                <th>Transaction Type</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>TimeStamp</th>
+                            </tr>
+                            <tr>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+                            
+                        </table>
+                        </div>
+            </div>
+        </div>
+        
+        <!-- Modal content -->
+
+        
+        <script>
+            
+            // Get the modal
+            var modal = document.getElementById('myModal');
+            
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+            
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+            
+            // When the user clicks the button, open the modal
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+        
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+            
+            function myFunction() {
+                
+                var x = document.getElementById("myTopnav");
+                if (x.className === "topnav") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "topnav";
+                }
+            }
+        </script>
+        
+    </body>
+</html>
+

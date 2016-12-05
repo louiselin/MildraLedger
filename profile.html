@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+                width: 100%;
+                border: 1px solid #ddd;
+            }
+        
+        th, td {
+            border: none;
+            text-align: left;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even){background-color: #f2f2f2}
+        
+        body {margin:0;}
+        ul.topnav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+        
+        ul.topnav li {float: left;}
+        
+        ul.topnav li a {
+            display: inline-block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+        
+        ul.topnav li a:hover {background-color: #555;}
+        
+        ul.topnav li.icon {display: none;}
+        
+        @media screen and (max-width:680px) {
+            ul.topnav li:not(:first-child) {display: none;}
+            ul.topnav li.icon {
+                float: right;
+                display: inline-block;
+            }
+        }
+        
+        @media screen and (max-width:680px) {
+            ul.topnav.responsive {position: relative;}
+            ul.topnav.responsive li.icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            ul.topnav.responsive li {
+                float: none;
+                display: inline;
+            }
+            ul.topnav.responsive li a {
+                display: block;
+                text-align: left;
+            }
+        }
+        
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            width: 20%;
+            border-radius: 5px;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        
+        img {
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .container {
+            padding: 2px 16px;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <ul class="topnav" id="myTopnav">
+            <li><a class="active" href="main.html">Main</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="editing.html">Editing</a></li>
+            <li><a href="Management.html">Management</a></li>
+            <li><a href="login.html">Logout</a></li>
+            <li class="icon">
+                <a href="javascript:void(0);" style="font-size:15px;" onclick="myFunction()">☰</a>
+            </li>
+        </ul>
+        
+        <p></p>
+        
+        <div class="card">
+            <img src="img_avatar2.png" alt="Avatar" style="width:100%">
+                <div class="container">
+                    
+                    <h4><b>Janny Chen</b></h4>
+                    
+                    <p>Interior Designer</p>
+                    
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <tr>
+                                <th>User Adress</th>
+                                <th>1234567</th>
+                            </tr>
+                            <tr>
+                                <td>Permission</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Timestamp</td>
+                                <td>2016/12/03</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <p></p>
+
+                </div>
+                </div>
+        
+            <script>
+            
+            function myFunction() {
+                
+                var x = document.getElementById("myTopnav");
+                if (x.className === "topnav") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "topnav";
+                }
+            }
+        </script>
+        
+    </body>
+</html>
+
