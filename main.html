@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+                width: 100%;
+                border: 1px solid #ddd;
+            }
+        
+        th, td {
+            border: none;
+            text-align: left;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even){background-color: #f2f2f2}
+        
+        body {margin:0;}
+        ul.topnav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+        
+        ul.topnav li {float: left;}
+        
+        ul.topnav li a {
+            display: inline-block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+        
+        ul.topnav li a:hover {background-color: #555;}
+        
+        ul.topnav li.icon {display: none;}
+        
+        @media screen and (max-width:680px) {
+            ul.topnav li:not(:first-child) {display: none;}
+            ul.topnav li.icon {
+                float: right;
+                display: inline-block;
+            }
+        }
+        
+        @media screen and (max-width:680px) {
+            ul.topnav.responsive {position: relative;}
+            ul.topnav.responsive li.icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            ul.topnav.responsive li {
+                float: none;
+                display: inline;
+            }
+            ul.topnav.responsive li a {
+                display: block;
+                text-align: left;
+            }
+        }
+        
+        /**/
+        
+        button.accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            transition: 0.4s;
+        }
+        
+        button.accordion.active, button.accordion:hover {
+            background-color: #ddd;
+        }
+        
+        button.accordion:after {
+            content: '\02795';
+            font-size: 13px;
+            color: #777;
+            float: right;
+            margin-left: 5px;
+        }
+        
+        button.accordion.active:after {
+            content: "\2796";
+        }
+        
+        div.panel {
+            padding: 0 18px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.6s ease-in-out;
+            opacity: 0;
+        }
+        
+        div.panel.show {
+            opacity: 1;
+            max-height: 2000px;
+        }
+        
+        /**/
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        #myInput {
+            background-image: url('/css/searchicon.png');
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 100%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+        
+        #myUL {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        #myUL li a {
+            border: 1px solid #ddd;
+            margin-top: -1px; /* Prevent double borders */
+            background-color: #f6f6f6;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black;
+            display: block
+        }
+        
+        #myUL li a.header {
+            background-color: #e2e2e2;
+            cursor: default;
+        }
+        
+        #myUL li a:hover:not(.header) {
+            background-color: #eee;
+        }
+        
+        /**/
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        #mytInput {
+            background-image: url('/css/searchicon.png');
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 100%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+        
+        #mytUL {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        #mytUL li a {
+            border: 1px solid #ddd;
+            margin-top: -1px; /* Prevent double borders */
+            background-color: #f6f6f6;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black;
+            display: block
+        }
+        
+        #mytUL li a.header {
+            background-color: #e2e2e2;
+            cursor: default;
+        }
+        
+        #mytUL li a:hover:not(.header) {
+            background-color: #eee;
+        }
+
+        
+            </style>
+        
+    </head>
+    <body>
+        
+        <ul class="topnav" id="myTopnav">
+            <li><a class="active" href="main.html">Main</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="editing.html">Editing</a></li>
+            <li><a href="Management.html">Management</a></li>
+            <li><a href="login.html">Logout</a></li>
+            <li class="icon">
+                <a href="javascript:void(0);" style="font-size:15px;" onclick="myFunction()">☰</a>
+            </li>
+        </ul>
+        
+        <button class="accordion">Writeoff</button>
+        
+        <div class="panel">
+            
+            <p></p>
+            
+            <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for cashier.." title="Type in a name">
+                
+                <ul id="myUL">
+                    <li><a href="#" class="header">A</a></li>
+                    <li><a href="#">Adele</a></li>
+                    <li><a href="#">Agnes</a></li>
+                    
+                    <li><a href="#" class="header">B</a></li>
+                    <li><a href="#">Billy</a></li>
+                    <li><a href="#">Bob</a></li>
+                    
+                    <li><a href="#" class="header">C</a></li>
+                    <li><a href="#">Calvin</a></li>
+                    <li><a href="#">Christina</a></li>
+                    <li><a href="#">Cindy</a></li>
+                </ul>
+                
+                <p></p>
+                
+            </div>
+        
+        <button class="accordion">Transaction</button>
+        
+        <div class="panel">
+            
+            <p></p>
+            
+            <input type="text" id="mytInput" onkeyup="searchTransFunction()" placeholder="Search for cashier.." title="Type in a name">
+                
+                <ul id="mytUL">
+                    <li><a href="#" class="header">A</a></li>
+                    <li><a href="#">Adele</a></li>
+                    <li><a href="#">Agnes</a></li>
+                    
+                    <li><a href="#" class="header">B</a></li>
+                    <li><a href="#">Billy</a></li>
+                    <li><a href="#">Bob</a></li>
+                    
+                    <li><a href="#" class="header">C</a></li>
+                    <li><a href="#">Calvin</a></li>
+                    <li><a href="#">Christina</a></li>
+                    <li><a href="#">Cindy</a></li>
+                </ul>
+
+                <p></p>
+                
+        </div>
+        
+        <script>
+            
+            function myFunction() {
+                
+                var x = document.getElementById("myTopnav");
+                if (x.className === "topnav") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "topnav";
+                }
+            }
+        
+        function searchFunction() {
+            var input, filter, ul, li, a, i;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("myUL");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                    
+                }
+            }
+        }
+        
+        function searchTransFunction() {
+            var input, filter, ul, li, a, i;
+            input = document.getElementById("mytInput");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("mytUL");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                    
+                }
+            }
+        }
+
+        
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        
+        for (i = 0; i < acc.length; i++) {
+            acc[i].onclick = function(){
+                this.classList.toggle("active");
+                this.nextElementSibling.classList.toggle("show");
+            }
+        }
+        
+        
+            </script>
+        
+    </body>
+</html>
+
