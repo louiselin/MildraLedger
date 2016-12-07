@@ -1,0 +1,20 @@
+[
+    {
+        "user_id": 1,
+        "account": "louiselin",
+        "eth_address": "0x635e7048f14c2474b8cf088eb0f096648d52fba4",
+        "permission": 7
+    },
+    {
+        "user_id": 2,
+        "account": "rickandmorty",
+        "eth_address": "b1eb2fb0b4b206565d958924e8c11ec1d19cd43d",
+        "permission": 3
+    },
+    {
+        "user_id": 3,
+        "account": "lr5329",
+        "eth_address": "84d3cbbb83737c391cbb4dd961db6e09c757da4f",
+        "permission": 1
+    }
+]

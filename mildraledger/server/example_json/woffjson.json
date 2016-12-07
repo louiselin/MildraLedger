@@ -1,0 +1,16 @@
+[
+    {
+        "tx_id": 2,
+        "writeoff_id": 1,
+        "cashier_address": "b1eb2fb0b4b206565d958924e8c11ec1d19cd43d",
+        "description": "Wrong amount.",
+        "timestamp": 1481132109
+    },
+    {
+        "tx_id": 4,
+        "writeoff_id": 2,
+        "cashier_address": "b1eb2fb0b4b206565d958924e8c11ec1d19cd43d",
+        "description": "Donated by school not RICH.",
+        "timestamp": 1481142109
+    }
+]
