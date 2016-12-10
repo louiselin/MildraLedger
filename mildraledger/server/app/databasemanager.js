@@ -22,6 +22,8 @@ var DatabaseManager = function ( dbconfig ) {
     this.writeOffCount = -1;
     this.ready = false;
 
+    // this.query = this.connection.query;
+
     this.getWriteOffCount();
     this.getTransactionCount();
 
@@ -48,6 +50,7 @@ DatabaseManager.prototype.nextWriteOffId = function () {
 DatabaseManager.prototype.close = function () {
     this.connection.end();
 };
+
 
 DatabaseManager.prototype.addUser = function ( info, callback ) {
     var insertQuery = 'INSERT INTO users (account, password, permission) values (?, ?, ?)';
@@ -159,13 +162,16 @@ DatabaseManager.prototype.queryWriteOffEntities = function ( ids, callback ) {
     this.connection.query( queryString, [ ids ], callback );
 };
 
-DatabaseManager.prototype.getBalance = function () {
+DatabaseManager.prototype.getBalance = function ( callback ) {
     var self = this;
     this.connection.query(
         'SELECT tx_type, amount FROM transactions WHERE tx_id NOT IN (SELECT tx_id FROM writeoffs)',
         function ( err, result ) {
             if ( err ) {
-                self.emit( 'gotBalance', -1 );
+                callback( err, {
+                    amount: -1
+                } );
+                return;
             }
 
             var amount = 0;
@@ -176,7 +182,11 @@ DatabaseManager.prototype.getBalance = function () {
                     amount -= row.amount;
                 }
             } );
-            self.emit( 'gotBalance', amount );
+            if ( callback !== undefined ) {
+                callback( err, {
+                    amount: amount
+                } );
+            }
         } );
 };
 
@@ -188,22 +198,32 @@ DatabaseManager.prototype.dumpWriteOffEntities = function ( callback ) {
     this.connection.query( 'SELECT * from writeoffs', callback );
 };
 
-DatabaseManager.prototype.getTransactionCount = function () {
+DatabaseManager.prototype.getTransactionCount = function ( callback ) {
     var self = this;
     this.connection.query( 'SELECT COUNT(*) from transactions;', function ( err, result ) {
         self.txCount = result[ 0 ][ 'COUNT(*)' ];
         self.emit( 'gotTxCount' );
+        if ( callback !== undefined ) {
+            callback( err, {
+                tx_count: self.txCount
+            } );
+        }
     } );
 };
 
-DatabaseManager.prototype.getWriteOffCount = function () {
+DatabaseManager.prototype.getWriteOffCount = function ( callback ) {
     var self = this;
     this.connection.query( 'SELECT COUNT(*) from writeoffs;', function ( err, result ) {
         self.writeOffCount = result[ 0 ][ 'COUNT(*)' ];
         self.emit( 'gotWriteOffCount' );
+        if ( callback !== undefined ) {
+            callback( err, {
+                woff_count: self.writeOffCount
+            } );
+        }
     } );
 };
 
-
-
-module.exports = DatabaseManager;
+module.exports = function ( dbconfig ) {
+    return new DatabaseManager( dbconfig );
+};

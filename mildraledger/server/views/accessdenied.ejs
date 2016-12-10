@@ -1,0 +1,33 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+
+<head>
+    <%- include('base/head') %>
+        <script>
+            setTimeout(function() {
+                window.location.href = '/ledger';
+            }, 2000);
+        </script>
+</head>
+
+<body>
+    <header>
+        <%- include('base/header') %>
+    </header>
+    <div class="container">
+
+        <!-- <div class="page-header text-center">
+		<h1><span class="fa fa-anchor"></span> Profile Page</h1>
+		<a href="/main" class="btn btn-default btn-sm">Home</a>
+	</div> -->
+
+        <h1 style="text-align: center; color: red;">You can not ACCESS this page!!</h1>
+        <p>
+            Back to <a href="/ledger">Ledger</a>.
+        </p>
+
+    </div>
+</body>
+
+</html>

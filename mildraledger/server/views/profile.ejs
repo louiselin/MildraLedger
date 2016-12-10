@@ -1,35 +1,39 @@
 <!-- views/profile.ejs -->
 <!doctype html>
 <html>
+
 <head>
-	<% include head %>
+    <%- include('base/head') %>
 </head>
+
 <body>
-<header>
-        <% include header %>
-</header>
-<div class="container">
-	<div class="page-header text-center">
-		<h1><span class="fa fa-user"></span> Personal Profile</h1>
-	</div>
+    <header>
+        <%- include('base/header', user) %>
+    </header>
+    <div class="container">
+        <div class="page-header text-center">
+            <h1><span class="fa fa-user"></span> Personal Profile</h1>
+        </div>
 
-		<!-- LOCAL INFORMATION -->
-		<div class="col-sm-12">
-			<div class="well">
-				<h3>Hello, <%= user.account %></h3>
+        <!-- LOCAL INFORMATION -->
+        <div class="col-sm-12">
+            <div class="well">
+                <h3>Hello, <%= user.account %></h3>
 
-					<p>
-						<strong>id</strong>: <%= user.user_id %><br>
-                        <strong>permission</strong>: <%= permission %> <br />
-                        <strong>eth address</strong>: <%= user.eth_address %> <br />
-                        <strong>registration time</strong>: <%= user.registration_time %> <br />
-                        <strong>last login time</strong>: <%= user.last_login_time %> <br />
-					</p>
+                <p>
+                    <strong>Account</strong>: <%= user.account %> <br />
+                    <strong>ID</strong>:<%= user.user_id %><br />
+                    <strong>Role</strong>:<%= role %> <br />
+                    <strong>Eth Address</strong>:<%= user.eth_address %> <br />
+                    <strong>Registration Time</strong>:<%= user.registration_time %> <br />
+                    <strong>Last Login Time</strong>:<%= user.last_login_time %> <br />
+                </p>
 
-			</div>
-		</div>
+            </div>
+        </div>
 
-	</div>
+    </div>
 
 </body>
+
 </html>

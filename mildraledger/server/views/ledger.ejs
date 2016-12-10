@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <% include head %>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+
+<head>
+    <%- include('base/head') %>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
     <header>
-        <% include header %>
+        <%- include('base/header', user); %>
     </header>
     <div class="container">
         <div class="jumbotron text-center">
-            <h1><span class="fa fa-home fa-fw"></span> Main</h1>
-            <p> To check user authentication.</p>
+            <h1><span class="fa fa-home fa-fw"></span> Ledger</h1>
 
-            <a href="/profile" class="btn btn-default"><span class="fa fa-user"></span> Personal Profile</a>
-            <a href="/ledgereditor" class="btn btn-default"><span class="fa fa-book fa-fw"></span> Ledger Editing</a>
-            <a href="/usermanagement" class="btn btn-default"><span class="fa fa-pencil fa-fw"></span> User Management</a>
         </div>
     </div>
-  </body>
+</body>
+
 </html>
