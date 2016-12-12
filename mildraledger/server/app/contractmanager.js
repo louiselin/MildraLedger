@@ -25,6 +25,7 @@
 
  util.inherits( ContractManager, events.EventEmitter );
 
+
  ContractManager.prototype.compile = function ( sourceFile ) {
      var sourceCode = '';
      if ( sourceFile && sourceFile.length !== 0 ) {
@@ -32,7 +33,8 @@
      }
      console.log( this.sourceFile );
      sourceCode = String( fs.readFileSync( this.sourceFile ) );
-     var output = solc.compile( sourceCode, 1 ); // 1 activates the optimiser
+     // 1 activates the optimiser
+     var output = solc.compile( sourceCode, 1 );
      for ( var contractName in output.contracts ) {
          // code and ABI that are needed by web3
          this.contractName = contractName;
@@ -49,12 +51,12 @@
      }
 
      var self = this;
-     var ok = web3.personal.unlockAccount( this.rootAddress, this.rootAddressPassword, 10 * 60 );
-     if ( !ok ) {
-         self.emit( 'deployed', false );
-         return;
-     }
-     console.log( this.rootAddress, 'unlocked!' );
+     //  var ok = web3.personal.unlockAccount( this.rootAddress, this.rootAddressPassword, 10 * 60 );
+     //  if ( !ok ) {
+     //      self.emit( 'deployed', false );
+     //      return;
+     //  }
+     //  console.log( this.rootAddress, 'unlocked!' );
 
      this.instance = web3.eth.contract( this.interface ).new( {
          from: this.rootAddress,
@@ -83,15 +85,15 @@
          throw new Error( 'No interface' );
      }
 
-     web3.eth.contract( this.interface ).at( this.contractAddress, function ( err, instance ) {
-         if ( err ) {
-             self.emit( 'loaded', false, self.contractAddress );
-         } else {
-             self.instance = instance;
-             self.emit( 'loaded', true, self.contractAddress );
-         }
-     } );
-
+     //  web3.eth.contract( this.interface ).at( this.contractAddress, function ( err, instance ) {
+     //      if ( err ) {
+     //          self.emit( 'loaded', false, self.contractAddress );
+     //      } else {
+     //          self.instance = instance;
+     //          self.emit( 'loaded', true, self.contractAddress );
+     //      }
+     //  } );
+     return web3.eth.contract( this.interface ).at( this.contractAddress );
  };
 
  ContractManager.prototype.getInterface = function () {

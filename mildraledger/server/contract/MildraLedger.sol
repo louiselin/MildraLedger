@@ -33,6 +33,7 @@ contract MildraLedger {
         TransactionTypes txType;
         // FIXME use hash would be better ?
         string txHash;               // Transaction hash in database.
+        bool valid;
     }
 
     struct WriteOffEntity {
@@ -64,6 +65,18 @@ contract MildraLedger {
 
         registerUser(root);
         userInfoMap[root].permission = RootPermission;
+    }
+
+    function clear() isRoot returns (bool) {
+        root = msg.sender;
+        txCount = 0;
+        writeOffCount = 0;
+        amount = 0;
+
+        registerUser(root);
+        userInfoMap[root].permission = RootPermission;
+
+        return true;
     }
 
     function getFastBalance() constant returns (int) {
@@ -168,6 +181,9 @@ contract MildraLedger {
         userInfoMap[addr].permission = NoPermission;
     }
 
+    function isTransactionValid(uint txId) constant returns (bool) {
+        return txList[txId].valid;
+    }
 
     function getBalance() constant returns (int) {
         if (!containsUser(msg.sender) || (getUserPermission(msg.sender) & CanRead) == 0 ) {
@@ -179,26 +195,15 @@ contract MildraLedger {
         uint i;
         int value;
 
-        Transaction memory tx;
-        for (i = 0; i < length; ++i ){
-            tx = txList[i];
-            value = int(tx.amount);
-            amount += (tx.txType == TransactionTypes.Income)
-                ? value
-                : -value;
+        for (i = 1; i <= length; ++i ){
+            Transaction tx = txList[i];
+            if (tx.valid){
+                value = int(tx.amount);
+                amount += (tx.txType == TransactionTypes.Income)
+                    ? value
+                    : -value;
+            }
         }
-
-        length = writeOffCount;
-        WriteOffEntity memory entity;
-        for (i = 0; i < length; ++i){
-            entity = writeOffList[i];
-            tx = txList[entity.txId];
-            value = int(tx.amount);
-            amount += (txList[i].txType == TransactionTypes.Income)
-                ? -value
-                : value;
-        }
-
         return amount;
     }
 
@@ -209,9 +214,11 @@ contract MildraLedger {
         TransactionTypes _txType,
         string _txHash) isCashier returns (uint) {
 
-        if ( _txId != txCount || _amount == 0){
+        if ( _txId != (txCount+1) || _amount == 0){
             throw;
         }
+
+        txCount++;
 
         if ( _txType == TransactionTypes.Income) {
             amount += int(_amount);
@@ -227,11 +234,12 @@ contract MildraLedger {
             amount: _amount,
             txType: _txType,
             txId: _txId,
-            txHash: _txHash
+            txHash: _txHash,
+            valid: true
         });
 
         TransactionAddedEvent(msg.sender, _txId);
-        return txCount++;
+        return txCount;
     }
 
     function queryTransaction(uint _txId) constant returns (
@@ -239,10 +247,11 @@ contract MildraLedger {
         address cashier,
         uint amount,
         TransactionTypes txType,
-        string txHash
+        string txHash,
+        bool valid
         ) {
 
-        if ( _txId >= txCount ) {
+        if ( _txId > txCount ) {
             throw;
         }
 
@@ -253,7 +262,7 @@ contract MildraLedger {
         txType = tx.txType;
         txHash = tx.txHash;
         cashier = tx.cashier;
-
+        valid = tx.valid;
     }
 
     function addWriteOffEntity(
@@ -262,15 +271,17 @@ contract MildraLedger {
         uint _timestamp,
         string _writeOffHash) isCashier returns (uint) {
 
-        if ( _writeOffId != writeOffCount) {
+        if ( _writeOffId != (writeOffCount+1)) {
             throw;
         }
 
-        Transaction memory tx = txList[_txId];
-        if ( tx.amount == 0 ){
+        Transaction tx = txList[_txId];
+        if ( tx.amount == 0 || !tx.valid ){
             throw;
         }
 
+        tx.valid = false;
+        writeOffCount++;
         if ( tx.txType == TransactionTypes.Income) {
             amount -= int(tx.amount);
         } else if ( tx.txType == TransactionTypes.Expenses) {
@@ -288,7 +299,7 @@ contract MildraLedger {
         });
 
         WriteOffAddedEvent(msg.sender, _writeOffId, _txId);
-        return writeOffCount++;
+        return writeOffCount;
     }
 
     function queryWriteOffEntity(uint _writeOffId) constant returns (
@@ -299,7 +310,7 @@ contract MildraLedger {
         TransactionTypes txType,
         string writeOffHash
     ) {
-        if ( _writeOffId >= writeOffCount) {
+        if ( _writeOffId > writeOffCount) {
             throw;
         }
 

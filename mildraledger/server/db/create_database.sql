@@ -24,8 +24,9 @@ CREATE TABLE transactions
     tx_type int NOT NULL,
     cashier_address varchar(100) NOT NULL,
     amount int NOT NULL,
-    timestamp int NOT NULL,
+    timestamp BIGINT NOT NULL,
     description varchar(100) NOT NULL,
+    valid bool NOT NULL DEFAULT TRUE,
     PRIMARY KEY(tx_id),
     UNIQUE(tx_id)
 ) ENGINE = INNODB CHARACTER SET = utf8;
@@ -36,7 +37,7 @@ CREATE TABLE writeoffs
     writeoff_id  int NOT NULL,
     cashier_address varchar(100) NOT NULL,
     description varchar(200) NOT NULL,
-    timestamp int NOT NULL,
+    timestamp BIGINT NOT NULL,
     UNIQUE(writeoff_id),
     UNIQUE(tx_id),
     FOREIGN KEY (tx_id) REFERENCES transactions(tx_id)

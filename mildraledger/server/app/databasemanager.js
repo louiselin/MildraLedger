@@ -35,9 +35,40 @@ var DatabaseManager = function ( dbconfig ) {
     };
     this.on( 'gotTxCount', checkReady );
     this.on( 'gotWriteOffCount', checkReady );
+
+    this.connection.on( 'error', function ( err ) {
+        console.log( 'db error', err );
+        if ( err.code === 'PROTOCOL_CONNECTION_LOST' ) {
+            self.handleDisconnect();
+        } else {
+            throw err;
+        }
+    } );
 };
 
 util.inherits( DatabaseManager, events.EventEmitter );
+
+DatabaseManager.prototype.handleDisconnect = function () {
+    var self = this;
+    this.connection = mysql.createConnection( this.dbconfig.connection );
+    this.connection.connect( function ( err ) {
+        if ( err ) {
+            console.log( 'error when connecting to db:', err );
+            setTimeout( function () {
+                self.handleDisconnect();
+            }, 2000 );
+        }
+    } );
+
+    this.connection.on( 'error', function ( err ) {
+        console.log( 'db error', err );
+        if ( err.code === 'PROTOCOL_CONNECTION_LOST' ) {
+            self.handleDisconnect();
+        } else {
+            throw err;
+        }
+    } );
+};
 
 DatabaseManager.prototype.nextTxId = function () {
     return this.txCount++;
@@ -126,16 +157,26 @@ DatabaseManager.prototype.queryTransactions = function ( txIds, callback ) {
 };
 
 DatabaseManager.prototype.addWriteOffEntity = function ( info, callback ) {
+    var self = this;
     var queryString =
         'INSERT INTO writeoffs (writeoff_id, tx_id, cashier_address, description, timestamp) values (?, ?, ?, ?, ?)';
-    this.connection.query( queryString, [ info.writeOffId, info.txId, info.cashierAddress, info.description, info.timestamp ], callback );
+    this.connection.query( queryString, [ info.writeOffId, info.txId, info.cashierAddress, info.description, info.timestamp ],
+        function ( err, result ) {
+            if ( err ) {
+                callback( err, result );
+            } else {
+                self.connection.query( 'UPDATE transactions SET valid = FALSE WHERE tx_id = ?', [ info.txId ], callback );
+            }
+        }
+    );
 };
 
 DatabaseManager.prototype.addWriteOffEntities = function ( infos, callback ) {
-
+    var self = this;
     var queryString =
         'INSERT INTO writeoffs (writeoff_id, tx_id, cashier_address, description, timestamp) values ?';
 
+    var txIds = [];
     var values = [];
     infos.forEach( function ( info ) {
         values.push( [
@@ -145,9 +186,16 @@ DatabaseManager.prototype.addWriteOffEntities = function ( infos, callback ) {
             info.description,
             info.timestamp
         ] );
+        txIds.push( info.txId );
     } );
 
-    this.connection.query( queryString, [ values ], callback );
+    this.connection.query( queryString, [ values ], function ( err, result ) {
+        if ( err ) {
+            callback( err, result );
+        } else {
+            self.connection.query( 'UPDATE transactions SET valid = FALSE WHERE tx_id IN (?)', [ txIds ], callback );
+        }
+    } );
 };
 
 DatabaseManager.prototype.queryWriteOffEntity = function ( writeOffId, callback ) {

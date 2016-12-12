@@ -3,8 +3,8 @@ var appRoot = require( 'app-root-path' );
 var projectName = 'MildraLedger';
 
 module.exports = {
-    contractAddress: '0x563b2320ac7acffdfa44c27bcd63fe81ac6ae191',
-    rootAddress: '0x23c09f3228b95a162cdfb47a75a4366eac8cd107',
+    contractAddress: '0x49f7b3437c3881705c1a57df184c0da4f62f7f14',
+    rootAddress: '0xb86d83929219cc8e52c854fc7cabe4fd30435948',
     rootAddressPassword: 'a',
     sourceFile: appRoot + '/contract/' + projectName + '.sol',
     abiFile: appRoot + '/contract/' + projectName + '.abi',

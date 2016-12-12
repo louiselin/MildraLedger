@@ -1,8 +1,10 @@
+
+
 module.exports = {
     connection: {
-        host: 'localhost',
-        user: 'root',
-        password: '104753014'
+        host: 'xxxxxxxx',
+        user: 'xxxxxxx',
+        password: 'xxxxx'
     },
     database: 'mildraledger',
     usersTable: 'users',

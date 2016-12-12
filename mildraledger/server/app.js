@@ -10,12 +10,43 @@ var cookieParser = require( 'cookie-parser' );
 var bodyParser = require( 'body-parser' );
 var passport = require( 'passport' );
 var flash = require( 'connect-flash' );
+var Web3 = require( 'web3' );
+var web3 = new Web3( new Web3.providers.HttpProvider( "http://localhost:8545" ) );
 
 
-var auth = require( './app/auth' );
 var dbconfig = require( './config/database' );
+var contractConfig = require( './config/contract-testrpc' );
+var eventEmitter = require( './app/eventemitter' );
+var auth = require( './app/auth' );
 var db = require( './app/databasemanager' )( dbconfig );
-var contract = {};
+var ContractManager = require( './app/contractmanager' );
+
+var cm = new ContractManager( contractConfig );
+contract = cm.loadInstance();
+
+if ( !contract ) {
+    var msg = 'Failed to load contract instance.';
+    console.log( msg );
+    throw new Error( msg );
+} else {
+    console.log( 'Contract loaded:', contract.address );
+    contract.TransactionAddedEvent( {}, function ( err, event ) {
+        console.log( "in TransactionAddedEvent:",
+            'TransactionAddedEvent:' + event.args.txId );
+
+        eventEmitter.emit(
+            'TransactionAddedEvent:' + event.args.txId,
+            event.args );
+    } );
+    contract.WriteOffAddedEvent( {}, function ( err, event ) {
+        console.log( "in WriteOffAddedEvent:",
+            'WriteOffAddedEvent:' + event.args.writeOffId );
+
+        eventEmitter.emit(
+            'WriteOffAddedEvent:' + event.args.writeOffId,
+            event.args );
+    } );
+}
 
 var routes = require( './routes/index' );
 var login = require( './routes/login' );
