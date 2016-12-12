@@ -9,13 +9,13 @@
 		<div>
 			<ul class="nav navbar-nav">
                 <li><a href="/profile">Personal Profile</a></li>
-                <% if(user.permission & 1){ %>
+                <% if(user != null && user.permission & 1){ %>
                     <li><a href="/ledger">Ledger</a></li>
 				<% } %>
-                <% if(user.permission & 2){ %>
+                <% if(user != null && user.permission & 2){ %>
 				    <li><a href="/ledgereditor">Ledger Editing</a></li>
                 <% } %>
-                <% if(user.permission & 4){ %>
+                <% if(user != null && user.permission & 4){ %>
 				    <li><a href="/usermanagement">User Management</a></li>
                 <% } %>
 			</ul>

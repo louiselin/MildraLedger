@@ -32,9 +32,9 @@
     }
 
     .navbar-custom {
-    background-color:#00688B;
-    color:#ffffff;
-}
+        background-color:#00688B;
+        color:#ffffff;
+    }
 
     .navbar-custom .navbar-nav > li > a {
         color:#fff;
@@ -42,6 +42,12 @@
     .navbar-custom .navbar-nav > li > a:hover {
         color:#05E9FF;
         background-color:transparent;
+    }
+
+    .navbar-custom .navbar-nav .active {
+        color: #01A9DB;
+        background-color: #E6E6E6;
+        border-radius: 5px;
     }
 
 /*    .navbar-custom .navbar-nav > li > a:focus {
@@ -52,6 +58,7 @@
         color: #74AFAD;
         background-color:transparent;
     }*/
+
     .navbar-custom .navbar-brand {
         color:#05E9FF;
     }
@@ -63,3 +70,13 @@
     
 
 </style>
+<script> 
+    $(document).ready(function(){
+        $('a').each(function(){
+            if ($(this).prop('href') == window.location.href) {
+                $(this).addClass('active');
+                $(this).parents('li').addClass('active');
+            }
+        });
+    });
+</script>

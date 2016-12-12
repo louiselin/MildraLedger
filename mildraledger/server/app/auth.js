@@ -15,7 +15,7 @@ module.exports.isLoggedIn = function ( req, res, next ) {
 
 module.exports.checkPermission = function ( flags ) {
     return function ( req, res, next ) {
-        if ( req.user.permission & flags ) {
+        if ( typeof req.user != 'undefined' && req.user.permission & flags ) {
             return next();
         } else {
             res.redirect( '/accessdenied' );

@@ -181,6 +181,9 @@ module.exports = function ( db, contract ) {
     } );
 
     router.post( '/tx/add', function ( req, res, next ) {
+        var cashierAddress = req.user.eth_address;
+        console.log("In api/tx/add cashierAddress", cashierAddress, req.user);
+
         var tx = req.body;
         var txId = contract.getTransactionCount();
         txId = txId.toNumber() + 1;
@@ -189,13 +192,13 @@ module.exports = function ( db, contract ) {
         var txHash = createTxHash(
             txId,
             timestamp,
-            tx.cashier_address,
+            cashierAddress,
             tx.amount,
             tx.tx_type,
             tx.description );
 
         console.log( 'RESTful API addTransaction',
-            tx.cashier_address,
+            cashierAddress,
             "tx_id:", txId,
             timestamp,
             tx.amount,
@@ -210,7 +213,7 @@ module.exports = function ( db, contract ) {
             tx.amount,
             tx.tx_type,
             txHash,
-            txObject( tx.cashier_address ),
+            txObject( cashierAddress ),
             function ( err, hash ) {
                 if ( err ) {
                     res.status( 500 ).json( err );
@@ -220,7 +223,7 @@ module.exports = function ( db, contract ) {
                             console.log( 'Try to add transaction into database.' );
                             db.addTransaction( {
                                 txId: txId,
-                                cashierAddress: tx.cashier_address,
+                                cashierAddress: cashierAddress,
                                 txType: tx.tx_type,
                                 amount: tx.amount,
                                 timestamp: timestamp,
@@ -237,7 +240,8 @@ module.exports = function ( db, contract ) {
 
     router.post( '/woff/add', function ( req, res, next ) {
         var woff = req.body;
-        if ( !contract.isTransactionValid( woff.tx_id, txObject( woff.cashier_address ) ) ) {
+        var cashierAddress = req.user.eth_address;
+        if ( !contract.isTransactionValid( woff.tx_id, txObject( cashierAddress ) ) ) {
             res.status( 200 ).json( {} );
             return;
         }
@@ -250,12 +254,12 @@ module.exports = function ( db, contract ) {
             writeOffId,
             woff.tx_id,
             timestamp,
-            woff.cashier_address,
+            cashierAddress,
             woff.description );
 
 
         console.log( 'RESTful API addWriteOffEntity',
-            "cashier:", woff.cashier_address,
+            "cashier:", cashierAddress,
             "tx_id:", woff.tx_id,
             "timestamp:", timestamp,
             "woff hash", writeOffHash,
@@ -268,7 +272,7 @@ module.exports = function ( db, contract ) {
             woff.tx_id,
             timestamp,
             writeOffHash,
-            txObject( woff.cashier_address ),
+            txObject( cashierAddress ),
             function ( err, hash ) {
                 if ( err ) {
                     res.status( 500 ).json( err );
@@ -279,7 +283,7 @@ module.exports = function ( db, contract ) {
                             db.addWriteOffEntity( {
                                 writeOffId: writeOffId,
                                 txId: woff.tx_id,
-                                cashierAddress: woff.cashier_address,
+                                cashierAddress: cashierAddress,
                                 description: woff.description,
                                 timestamp: timestamp
                             }, function ( err, result ) {
