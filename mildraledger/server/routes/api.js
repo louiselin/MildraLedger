@@ -312,6 +312,20 @@ module.exports = function ( db, contract ) {
         } );
     } );
 
+    //update data
+    router.put('/user/:user_id', function(req,res,next){
+        var id = req.params.user_id;
+        //get data
+        var data = {
+            permission:req.body.permission
+         };
+
+        db.connection.query( "UPDATE users set ? WHERE user_id = ? ",[data, id], function ( err, result ) {
+            next( err, result[ 0 ] );
+        });
+
+    });
+
     router.get( '/balance', function ( req, res, next ) {
         db.getBalance( function ( err, amount ) {
             sendJSON( res, err, amount );
