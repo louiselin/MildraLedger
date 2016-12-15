@@ -66,6 +66,10 @@ module.exports = function ( db, contract ) {
         } );
     } );
 
+    // '/tx/daily/all'
+    // '/tx/month/all'
+    // '/tx/year/all'
+
     router.get( '/contract_txs', function ( req, res ) {
         var len = contract.getTransactionCount();
         var data = null;

@@ -3,7 +3,7 @@
 
 <!-- CSS -->
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!-- load fontawesome -->
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.3/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.1/css/select.dataTables.min.css">
@@ -67,17 +67,25 @@
     .fontcenter {
         text-align: center;
     }
-
+    
+    .sideli.active > a {
+        border-radius: 5px;
+        background-color: #00688B !important;
+        color: #ffffff;
+    }
+    
     
 
 </style>
 <script> 
     $(document).ready(function(){
         $('a').each(function(){
+            // alert('here');
             if ($(this).prop('href') == window.location.href) {
                 $(this).addClass('active');
                 $(this).parents('li').addClass('active');
             }
+
         });
     });
 </script>
