@@ -239,16 +239,16 @@ DatabaseManager.prototype.getBalance = function ( callback ) {
 };
 
 DatabaseManager.prototype.dumpTransactions = function ( callback ) {
-    this.connection.query( 'SELECT * from transactions', callback );
+    this.connection.query( 'SELECT * FROM transactions ORDER BY timestamp ASC', callback );
 };
 
 DatabaseManager.prototype.dumpWriteOffEntities = function ( callback ) {
-    this.connection.query( 'SELECT * from writeoffs', callback );
+    this.connection.query( 'SELECT * FROM writeoffs', callback );
 };
 
 DatabaseManager.prototype.getTransactionCount = function ( callback ) {
     var self = this;
-    this.connection.query( 'SELECT COUNT(*) from transactions;', function ( err, result ) {
+    this.connection.query( 'SELECT COUNT(*) FROM transactions;', function ( err, result ) {
         self.txCount = result[ 0 ][ 'COUNT(*)' ];
         self.emit( 'gotTxCount' );
         if ( callback !== undefined ) {

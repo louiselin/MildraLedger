@@ -10,6 +10,16 @@ var eventEmitter = require( '../app/eventemitter' );
 
 var router = express.Router();
 
+Date.prototype.yyyymmdd = function () {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+
+    return [ this.getFullYear(),
+        ( mm > 9 ? '' : '0' ) + mm,
+        ( dd > 9 ? '' : '0' ) + dd
+    ].join( '-' );
+};
+
 var createTxHash = function ( txId, timestamp, cashier, amount, txType, description ) {
     return crypto.createHash( 'sha256' ).update(
         txId.toString() +
@@ -66,9 +76,103 @@ module.exports = function ( db, contract ) {
         } );
     } );
 
-    // '/tx/daily/all'
-    // '/tx/month/all'
-    // '/tx/year/all'
+    function isSameDate( a, b ) {
+        return a.getFullYear() === b.getFullYear() &&
+            a.getMonth() === b.getMonth() &&
+            a.getDate() === b.getDate();
+    }
+
+    router.get( '/tx/daily/all', function ( req, res, next ) {
+        db.dumpTransactions( function ( err, results ) {
+            if ( err ) {
+                res.writeHead( 500, {
+                    'Content-Type': 'x-application/json'
+                } );
+                res.end( JSON.stringify( {
+                    error: 'Internal error.'
+                } ) );
+            } else {
+
+                function Obj( timestamp ) {
+                    this.timestamp = timestamp;
+                    this.income = 0;
+                    this.expense = 0;
+                    this.balance = 0;
+                }
+
+                var data = [];
+
+                var balance = 0;
+                var lastDate = new Date( 0 );
+                var currentDate = null;
+                var currentData = null;
+                var toPush = false;
+
+                results.forEach( function ( row ) {
+                    if ( !row.valid ) {
+                        return;
+                    }
+
+                    currentDate = new Date( row.timestamp );
+                    if ( !isSameDate( currentDate, lastDate ) ) {
+                        var timestamp = new Date( 0 );
+                        timestamp.setFullYear( currentDate.getFullYear() );
+                        timestamp.setMonth( currentDate.getMonth() );
+                        timestamp.setDate( currentDate.getDate() );
+
+                        currentData = new Obj( timestamp.yyyymmdd() );
+                        lastDate = currentDate;
+                        toPush = true;
+                    }
+
+                    if ( row.tx_type === 0 ) {
+                        balance += row.amount;
+                        currentData.income += row.amount;
+                        currentData.balance = balance;
+                    } else {
+                        balance -= row.amount;
+                        currentData.expense += row.amount;
+                        currentData.balance = balance;
+                    }
+
+                    if ( toPush ) {
+                        data.push( currentData );
+                        toPush = false;
+                    }
+                } );
+
+                var firstDay = new Date( data[ 0 ].timestamp );
+                var lastDay = new Date( data[ data.length - 1 ].timestamp );
+                var output = [];
+
+                while ( firstDay <= lastDay ) {
+                    var x = firstDay.yyyymmdd();
+                    var ifSame = false;
+                    data.forEach( ( ele ) => {
+                        if ( x === ele.timestamp ) {
+                            output.push( ele );
+                            ifSame = true;
+                            balance = ele.balance;
+                        }
+                    } );
+
+                    if ( !ifSame ) {
+                        output.push( {
+                            timestamp: x,
+                            income: 0,
+                            expense: 0,
+                            balance: balance,
+                        } );
+                    }
+                    firstDay.setDate( firstDay.getDate() + 1 );
+                }
+
+
+                // res.end( JSON.stringify( data ) );
+                res.end( JSON.stringify( output ) );
+            }
+        } );
+    } );
 
     router.get( '/contract_txs', function ( req, res ) {
         var len = contract.getTransactionCount();
@@ -186,12 +290,15 @@ module.exports = function ( db, contract ) {
 
     router.post( '/tx/add', function ( req, res, next ) {
         var cashierAddress = req.user.eth_address;
-        console.log("In api/tx/add cashierAddress", cashierAddress, req.user);
+        // var cashierAddress = req.body.eth_address;
+        console.log( "In api/tx/add cashierAddress", cashierAddress, req.user );
 
         var tx = req.body;
         var txId = contract.getTransactionCount();
         txId = txId.toNumber() + 1;
         var timestamp = Date.now();
+
+        // timestamp += 16 * 1000 * 60 * 60 * 24;
 
         var txHash = createTxHash(
             txId,
@@ -316,19 +423,30 @@ module.exports = function ( db, contract ) {
         } );
     } );
 
-    //update data
-    router.put('/user/:user_id', function(req,res,next){
+    // Update user data
+    router.put( '/user/:user_id', function ( req, res, next ) {
         var id = req.params.user_id;
-        //get data
+
         var data = {
-            permission:req.body.permission
-         };
+            permission: req.body.permission
+        };
 
-        db.connection.query( "UPDATE users set ? WHERE user_id = ? ",[data, id], function ( err, result ) {
-            next( err, result[ 0 ] );
-        });
+        contract.changeUserPermission( req.body.permission, function ( err, hash ) {
+            if ( !err ) {
+                db.connection.query( "UPDATE users SET ? WHERE user_id = ? ", [ data, id ], function ( err, result ) {
+                    if ( !err ) {
+                        res.status( 202 );
+                        res.end();
+                    } else {
+                        res.status( 500 ).json( err );
+                    }
+                } );
+            } else {
+                res.status( 500 ).json( err );
+            }
+        } );
 
-    });
+    } );
 
     router.get( '/balance', function ( req, res, next ) {
         db.getBalance( function ( err, amount ) {

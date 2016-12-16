@@ -20,23 +20,21 @@
 <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
 
 <style>
-    body { 
+    body {
         background-color:#F0F8FF;
         padding: 0 !important;
-        margin: 0 !important; 
+        margin: 0 !important;
     }
     .pad_top {
         margin-top: 100px;
-    } 
+    }
     .pad_bottom {
         margin-bottom: 100px;
     }
-
     .navbar-custom {
         background-color:#00688B;
         color:#ffffff;
     }
-
     .navbar-custom .navbar-nav > li > a {
         color:#fff;
     }
@@ -44,13 +42,11 @@
         color:#05E9FF;
         background-color:transparent;
     }
-
     .navbar-custom .navbar-nav .active {
         color: #01A9DB;
         background-color: #E6E6E6;
         border-radius: 5px;
     }
-
 /*    .navbar-custom .navbar-nav > li > a:focus {
         color:#05E9FF;
         background-color:transparent;
@@ -59,33 +55,31 @@
         color: #74AFAD;
         background-color:transparent;
     }*/
-
     .navbar-custom .navbar-brand {
         color:#05E9FF;
     }
-
     .fontcenter {
         text-align: center;
     }
-    
+
     .sideli.active > a {
         border-radius: 5px;
         background-color: #00688B !important;
         color: #ffffff;
     }
-    
-    
+
+    .deletedEntity {
+        background-color: #dd0000 !important;
+    }
 
 </style>
-<script> 
+<script>
     $(document).ready(function(){
         $('a').each(function(){
-            // alert('here');
             if ($(this).prop('href') == window.location.href) {
                 $(this).addClass('active');
                 $(this).parents('li').addClass('active');
             }
-
         });
     });
 </script>

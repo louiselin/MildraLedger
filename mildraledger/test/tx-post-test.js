@@ -7,10 +7,9 @@ var reqs = [];
 
 function createRequest() {
     var postData = {
-        cashier_address: web3.eth.coinbase,
+        eth_address: web3.eth.coinbase,
         tx_type: Math.round( Math.random() ),
         amount: Math.floor( 1000 * Math.random() ),
-        timestamp: Date.now(),
         description: "This is the description"
     };
 
