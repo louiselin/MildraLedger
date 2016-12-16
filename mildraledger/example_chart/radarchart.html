@@ -1,0 +1,123 @@
+<html>
+
+<body>
+    <div>
+    	<canvas id="radarChart" width="400" height="300"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        var data = [{
+            "timestamp": "2016-12-16",
+            "income": 7069,
+            "expense": 6814,
+            "balance": 255
+        }, {
+            "timestamp": "2016-12-17",
+            "income": 8078,
+            "expense": 11389,
+            "balance": -3056
+        }, {
+            "timestamp": "2016-12-18",
+            "income": 10004,
+            "expense": 6557,
+            "balance": 391
+        }, {
+            "timestamp": "2016-12-19",
+            "income": 3754,
+            "expense": 973,
+            "balance": 3172
+        }, {
+            "timestamp": "2016-12-20",
+            "income": 6349,
+            "expense": 3572,
+            "balance": 5949
+        }, {
+            "timestamp": "2016-12-21",
+            "income": 0,
+            "expense": 0,
+            "balance": 5949
+        }, {
+            "timestamp": "2016-12-22",
+            "income": 0,
+            "expense": 0,
+            "balance": 5949
+        }, {
+            "timestamp": "2016-12-23",
+            "income": 0,
+            "expense": 0,
+            "balance": 5949
+        }, {
+            "timestamp": "2016-12-24",
+            "income": 2533,
+            "expense": 4235,
+            "balance": 4247
+        }, {
+            "timestamp": "2016-12-25",
+            "income": 0,
+            "expense": 0,
+            "balance": 4247
+        }, {
+            "timestamp": "2016-12-26",
+            "income": 0,
+            "expense": 0,
+            "balance": 4247
+        }, {
+            "timestamp": "2016-12-27",
+            "income": 0,
+            "expense": 0,
+            "balance": 4247
+        }, {
+            "timestamp": "2016-12-28",
+            "income": 840,
+            "expense": 683,
+            "balance": 4404
+        }, {
+            "timestamp": "2016-12-29",
+            "income": 513,
+            "expense": 0,
+            "balance": 4917
+        }, {
+            "timestamp": "2016-12-30",
+            "income": 0,
+            "expense": 0,
+            "balance": 4917
+        }, {
+            "timestamp": "2016-12-31",
+            "income": 0,
+            "expense": 0,
+            "balance": 4917
+        }, {
+            "timestamp": "2017-01-01",
+            "income": 551,
+            "expense": 898,
+            "balance": 4570
+        }];
+        
+        data.forEach(function(a) {
+            var ctx = document.getElementById("radarChart");
+
+
+            var lineChart = new Chart(ctx, {
+                // type: 'line',
+                data: data,
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+        });
+
+
+    });
+    </script>
+</body>
+
+</html>
