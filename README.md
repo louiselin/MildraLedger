@@ -30,7 +30,9 @@ $ npm start
  本節將說明一智能合約範例，透過建構一個合約來允許不同權限的人進行團裡資金記錄。
 
 ### 權限/user management
+
 - 角色
+
 |    權限    | user management |
 | ---------- | --- |
 |    Root (admin)    | 用user address，在deploy決定，不能修改 |
@@ -38,6 +40,7 @@ $ npm start
 | NormalUser   |  一般使用者 |
 
 - 使用者管理
+
 |    權限    | user.permission  |
 | ---------- | --- |
 |    isRoot()  | CanModifyUser | CanModifyLedge | CanRead   |
@@ -48,18 +51,20 @@ $ npm start
 = > if(!(Permission & 4) == 0) user.permission=CanModifyUser
 
 - 管理成員
-  |        | 敘述 |
-  | ---------- | --- |
-  |    register(address)  | 加成員  |
-  | unregister(address) |  去除成員 |
+
+|        | 敘述 |
+| ---------- | --- |
+|    register(address)  | 加成員  |
+| unregister(address) |  去除成員 |
 
    ** contract 本身並不自動產生address，由前、後端產生（address=user，而user會被權限控制）
 
 - 管理成員
-   |        | 敘述 |
-   | ---------- | --- |
-   |  activate(address) | 解凍成員  |
-   | deactivate(address) | 凍結成員原有權限，連看都不能看 |
+
+|        | 敘述 |
+| ---------- | --- |
+|  activate(address) | 解凍成員  |
+| deactivate(address) | 凍結成員原有權限，連看都不能看 |
 
 
 ### 交易
